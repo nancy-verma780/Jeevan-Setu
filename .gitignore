@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+.venv/
+.env
+
+# Local data and the private image store
+backend/*.db
+backend/private_images/
+backend/e2e_images/
+backend/ml/weights/*.pt
+
+# Node
+frontend/node_modules/
+frontend/dist/
+frontend/test-results/
+frontend/playwright-report/
+
+# Portable Node server data
+node_modules/
+server/data/
+server/e2e-data/

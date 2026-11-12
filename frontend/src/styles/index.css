@@ -1,0 +1,50 @@
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+@import "@fontsource/noto-sans-devanagari/400.css";
+@import "@fontsource/noto-sans-devanagari/500.css";
+@import "@fontsource/noto-sans-devanagari/600.css";
+@import "@fontsource/noto-sans-devanagari/700.css";
+@import "leaflet/dist/leaflet.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-slate-50 font-sans text-base text-slate-900 antialiased;
+  }
+  html:lang(hi) body {
+    @apply font-devanagari;
+  }
+  :focus-visible {
+    @apply outline outline-2 outline-offset-2 outline-primary-700;
+  }
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Leaflet controls follow the app's focus and border style. */
+.leaflet-container {
+  font: inherit;
+}
+.leaflet-bar a:focus-visible {
+  outline: 2px solid #0f766e;
+}

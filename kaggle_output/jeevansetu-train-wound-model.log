@@ -1,0 +1,90 @@
+[{"stream_name":"stderr","time":8.655004422,"data":"/usr/local/lib/python3.13/dist-packages/nbformat/validator.py:434: MissingIDFieldWarning: Cell is missing an id field, this will become a hard error in future nbformat versions. You may want to use `normalize()` on your notebooks before validations (available since nbformat 5.1.4). Previous versions of nbformat are fixing this issue transparently, and will stop doing so in the future.\n"}
+,{"stream_name":"stderr","time":8.655078042,"data":"  _validate(nbdict, ref, version, version_minor, relax_add_props)\n"}
+,{"stream_name":"stderr","time":10.094227265,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":10.09427225,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":10.09427786,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":10.094281975,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":10.930210375,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":10.93041041,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":10.930426955,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":10.93043161,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":36.002500162,"data":"device: cpu | torch 2.11.0+cpu | timm 1.0.30\n"}
+,{"stream_name":"stdout","time":38.195497019,"data":"train {'diabetic': 139, 'pressure': 100, 'surgical': 122, 'venous': 185} total 546\n"}
+,{"stream_name":"stdout","time":38.195543844,"data":"test {'diabetic': 46, 'pressure': 34, 'surgical': 42, 'venous': 62} total 184\n"}
+,{"stream_name":"stdout","time":38.324006165,"data":"train 464, validation 82, test 184\n"}
+,{"stream_name":"stdout","time":38.324046015,"data":"class weights [0.983 1.365 1.115 0.739]\n"}
+,{"stream_name":"stderr","time":42.723907168,"data":"Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.\n"}
+,{"stream_name":"stderr","time":42.723953609,"data":"\n"}
+,{"stream_name":"stderr","time":42.723959588,"data":"Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.\n"}
+,{"stream_name":"stdout","time":44.072568063,"data":"mobilenetv2_100: stage 1, backbone frozen\n"}
+,{"stream_name":"stdout","time":73.141428308,"data":"  epoch  1: validation macro-F1 0.260\n"}
+,{"stream_name":"stdout","time":101.215999896,"data":"  epoch  2: validation macro-F1 0.330\n"}
+,{"stream_name":"stdout","time":129.399959419,"data":"  epoch  3: validation macro-F1 0.316\n"}
+,{"stream_name":"stdout","time":157.823777193,"data":"  epoch  4: validation macro-F1 0.335\n"}
+,{"stream_name":"stdout","time":186.284309634,"data":"  epoch  5: validation macro-F1 0.372\n"}
+,{"stream_name":"stdout","time":186.284367812,"data":"mobilenetv2_100: stage 2, last 30% of parameter tensors unfrozen\n"}
+,{"stream_name":"stdout","time":213.40121771,"data":"  epoch  1: validation macro-F1 0.492\n"}
+,{"stream_name":"stdout","time":240.841866119,"data":"  epoch  2: validation macro-F1 0.496\n"}
+,{"stream_name":"stdout","time":268.435373561,"data":"  epoch  3: validation macro-F1 0.553\n"}
+,{"stream_name":"stdout","time":295.862527656,"data":"  epoch  4: validation macro-F1 0.580\n"}
+,{"stream_name":"stdout","time":323.015937931,"data":"  epoch  5: validation macro-F1 0.579\n"}
+,{"stream_name":"stdout","time":350.225254307,"data":"  epoch  6: validation macro-F1 0.580\n"}
+,{"stream_name":"stdout","time":377.877773251,"data":"  epoch  7: validation macro-F1 0.595\n"}
+,{"stream_name":"stdout","time":405.60766896,"data":"  epoch  8: validation macro-F1 0.664\n"}
+,{"stream_name":"stdout","time":433.087000425,"data":"  epoch  9: validation macro-F1 0.624\n"}
+,{"stream_name":"stdout","time":460.368541111,"data":"  epoch 10: validation macro-F1 0.611\n"}
+,{"stream_name":"stdout","time":487.856431703,"data":"  epoch 11: validation macro-F1 0.660\n"}
+,{"stream_name":"stdout","time":514.953650034,"data":"  epoch 12: validation macro-F1 0.654\n"}
+,{"stream_name":"stdout","time":514.953695478,"data":"  early stop\n"}
+,{"stream_name":"stdout","time":514.953702299,"data":"mobilenetv2_100: trained in 7.9 min, best validation macro-F1 0.664\n"}
+,{"stream_name":"stdout","time":527.530004528,"data":"{\n"}
+,{"stream_name":"stdout","time":527.530064512,"data":" \"test_accuracy\": 0.6304,\n"}
+,{"stream_name":"stdout","time":527.530073045,"data":" \"test_macro_f1\": 0.6068,\n"}
+,{"stream_name":"stdout","time":527.530079934,"data":" \"validation_macro_f1\": 0.6638,\n"}
+,{"stream_name":"stdout","time":527.53008666,"data":" \"tau\": 0.5615,\n"}
+,{"stream_name":"stdout","time":527.530093192,"data":" \"coverage\": 0.8641,\n"}
+,{"stream_name":"stdout","time":527.530099486,"data":" \"selective_accuracy\": 0.6667,\n"}
+,{"stream_name":"stdout","time":527.530106106,"data":" \"cpu_ms_per_image\": 28.4,\n"}
+,{"stream_name":"stdout","time":527.530112054,"data":" \"parameters_millions\": 2.23,\n"}
+,{"stream_name":"stdout","time":527.530133826,"data":" \"images\": {\n"}
+,{"stream_name":"stdout","time":527.530141135,"data":"  \"train\": 464,\n"}
+,{"stream_name":"stdout","time":527.530146912,"data":"  \"validation\": 82,\n"}
+,{"stream_name":"stdout","time":527.530152789,"data":"  \"test\": 184\n"}
+,{"stream_name":"stdout","time":527.530159406,"data":" }\n"}
+,{"stream_name":"stdout","time":527.530165249,"data":"}\n"}
+,{"stream_name":"stdout","time":527.530170901,"data":"              precision    recall  f1-score   support\n"}
+,{"stream_name":"stdout","time":527.53017678,"data":"\n"}
+,{"stream_name":"stdout","time":527.530182774,"data":"    diabetic      0.689     0.674     0.681        46\n"}
+,{"stream_name":"stdout","time":527.530188985,"data":"    pressure      0.429     0.353     0.387        34\n"}
+,{"stream_name":"stdout","time":527.530194857,"data":"    surgical      0.633     0.738     0.681        42\n"}
+,{"stream_name":"stdout","time":527.53020157,"data":"      venous      0.677     0.677     0.677        62\n"}
+,{"stream_name":"stdout","time":527.530207406,"data":"\n"}
+,{"stream_name":"stdout","time":527.530247533,"data":"    accuracy                          0.630       184\n"}
+,{"stream_name":"stdout","time":527.530275578,"data":"   macro avg      0.607     0.611     0.607       184\n"}
+,{"stream_name":"stdout","time":527.530282284,"data":"weighted avg      0.624     0.630     0.626       184\n"}
+,{"stream_name":"stdout","time":527.530287543,"data":"\n"}
+,{"stream_name":"stdout","time":527.53029228,"data":"confusion matrix (rows = true, columns = predicted)\n"}
+,{"stream_name":"stdout","time":527.530297181,"data":" [[31  4  6  5]\n"}
+,{"stream_name":"stdout","time":527.530301895,"data":" [ 7 12  5 10]\n"}
+,{"stream_name":"stdout","time":527.530306621,"data":" [ 2  4 31  5]\n"}
+,{"stream_name":"stdout","time":527.530311696,"data":" [ 5  8  7 42]]\n"}
+,{"stream_name":"stdout","time":528.311802912,"data":"{'backbone': 'MobileNetV2', 'params_m': 2.23, 'val_macro_f1': 0.6638, 'test_accuracy': 0.6304, 'test_macro_f1': 0.6068, 'cpu_ms': 28.4}\n"}
+,{"stream_name":"stderr","time":528.549865244,"data":"/tmp/ipykernel_16/3794482512.py:14: DeprecationWarning: You are using the legacy TorchScript-based ONNX export. Starting in PyTorch 2.9, the new torch.export-based ONNX exporter has become the default. Learn more about the new export logic: https://docs.pytorch.org/docs/stable/onnx_export.html. For exporting control flow: https://pytorch.org/tutorials/beginner/onnx/export_control_flow_model_to_onnx_tutorial.html\n"}
+,{"stream_name":"stderr","time":528.549917522,"data":"  torch.onnx.export(export_model, dummy, onnx_path, dynamo=False, **kwargs)\n"}
+,{"stream_name":"stderr","time":528.549923289,"data":"\n"}
+,{"stream_name":"stderr","time":528.54992703,"data":"/tmp/ipykernel_16/3794482512.py:14: DeprecationWarning: You are using the legacy TorchScript-based ONNX export. Starting in PyTorch 2.9, the new torch.export-based ONNX exporter has become the default. Learn more about the new export logic: https://docs.pytorch.org/docs/stable/onnx_export.html. For exporting control flow: https://pytorch.org/tutorials/beginner/onnx/export_control_flow_model_to_onnx_tutorial.html\n"}
+,{"stream_name":"stderr","time":528.549932356,"data":"  torch.onnx.export(export_model, dummy, onnx_path, dynamo=False, **kwargs)\n"}
+,{"stream_name":"stdout","time":529.725895738,"data":"max difference torch vs onnx: 6.496906280517578e-06 | feature map (1, 1280, 7, 7)\n"}
+,{"stream_name":"stdout","time":530.479019383,"data":"Done. Download /kaggle/working/jeevansetu_model.zip\n"}
+,{"stream_name":"stdout","time":530.479062645,"data":"Test accuracy 63.0%, macro-F1 0.607, coverage 86.4% at tau 0.56, selective accuracy 66.7%\n"}
+,{"stream_name":"stderr","time":536.595277356,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":536.595334985,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":536.83196717,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":536.832013422,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":537.813705438,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":537.920447202,"data":"[NbConvertApp] Writing 127865 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":541.077421461,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":541.835916119,"data":"[NbConvertApp] Support files will be in __results___files/\n"}
+,{"stream_name":"stderr","time":541.835966407,"data":"[NbConvertApp] Making directory __results___files\n"}
+,{"stream_name":"stderr","time":541.836327848,"data":"[NbConvertApp] Writing 385851 bytes to __results__.html\n"}
+]

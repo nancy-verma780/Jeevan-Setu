@@ -1,0 +1,24 @@
+{
+  "name": "jeevansetu",
+  "version": "1.0.0",
+  "private": true,
+  "description": "JeevanSetu emergency response prototype: citizen app, hospital dashboard and admin console.",
+  "type": "module",
+  "scripts": {
+    "postinstall": "npm install --prefix frontend --no-audit --no-fund",
+    "dev": "node scripts/dev.mjs",
+    "start": "npm run build --prefix frontend && node server/index.mjs",
+    "server": "node server/index.mjs",
+    "reset": "node scripts/reset.mjs",
+    "test": "node --test server/test/logic.test.mjs server/test/analyzer.test.mjs server/test/api.test.mjs",
+    "e2e": "npm run e2e --prefix frontend"
+  },
+  "engines": {
+    "node": ">=18.18"
+  },
+  "dependencies": {
+    "jpeg-js": "0.4.4",
+    "onnxruntime-web": "1.20.1",
+    "pngjs": "7.0.0"
+  }
+}

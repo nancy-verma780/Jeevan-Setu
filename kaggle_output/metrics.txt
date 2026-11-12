@@ -1,0 +1,51 @@
+{
+  "test_accuracy": 0.6304,
+  "test_macro_f1": 0.6068,
+  "validation_macro_f1": 0.6638,
+  "tau": 0.5615,
+  "coverage": 0.8641,
+  "selective_accuracy": 0.6667,
+  "cpu_ms_per_image": 28.4,
+  "parameters_millions": 2.23,
+  "per_class": {
+    "diabetic": {
+      "precision": 0.689,
+      "recall": 0.674,
+      "f1": 0.681,
+      "support": 46
+    },
+    "pressure": {
+      "precision": 0.429,
+      "recall": 0.353,
+      "f1": 0.387,
+      "support": 34
+    },
+    "surgical": {
+      "precision": 0.633,
+      "recall": 0.738,
+      "f1": 0.681,
+      "support": 42
+    },
+    "venous": {
+      "precision": 0.677,
+      "recall": 0.677,
+      "f1": 0.677,
+      "support": 62
+    }
+  },
+  "images": {
+    "train": 464,
+    "validation": 82,
+    "test": 184
+  },
+  "comparison": [
+    {
+      "backbone": "MobileNetV2",
+      "params_m": 2.23,
+      "val_macro_f1": 0.6638,
+      "test_accuracy": 0.6304,
+      "test_macro_f1": 0.6068,
+      "cpu_ms": 28.4
+    }
+  ]
+}
