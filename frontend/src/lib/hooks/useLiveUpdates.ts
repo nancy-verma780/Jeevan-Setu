@@ -1,7 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { createContext, useContext, useEffect, useState } from "react";
 
-const QUERIES = ["emergency", "emergencies", "staff-queue", "staff-hospital", "staff-case", "admin-overview", "admin-requests", "admin-hospitals", "admin-insights", "admin-notifications", "access-log"];
+const QUERIES = ["emergency", "emergencies", "staff-queue", "staff-hospital", "staff-case", "admin-overview", "admin-requests", "admin-hospitals", "admin-insights", "admin-notifications", "access-log", "broadcast", "comments", "handover"];
 
 /**
  * Listens to the server's event stream and refreshes data as soon as anything

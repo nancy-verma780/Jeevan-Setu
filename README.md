@@ -1,338 +1,334 @@
-# JeevanSetu
+<p align="center">
+  <img src="docs/banner.svg" alt="JeevanSetu: from an emergency report to a hospital that has said yes" width="100%">
+</p>
 
-A web app that turns a citizen's emergency report into a hospital handover. The citizen reports what happened, the server sets a preliminary priority with readable rules, ranks nearby hospitals that offer the right services, and asks the best one. If that hospital declines or does not reply in time, the request moves to the next one automatically. Everyone sees the same timeline.
+<p align="center">
+  <img alt="React 18" src="https://img.shields.io/badge/React-18-0F766E">
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-strict-0F766E">
+  <img alt="Node.js" src="https://img.shields.io/badge/Node.js-20%2B-0F766E">
+  <img alt="Tests" src="https://img.shields.io/badge/tests-109%20passing-15803D">
+  <img alt="Languages" src="https://img.shields.io/badge/languages-English%20%7C%20Hindi-1D4ED8">
+</p>
 
-It implements the paper *JeevanSetu: A Machine-Learning-Assisted Emergency Response Framework* (Verma, Pandey, Paliwal, Tomar, Bhardwaj).
+**JeevanSetu** ("bridge of life") turns a citizen's emergency report into a hospital handover. The citizen reports what happened in three short steps. The server sets a preliminary priority with readable rules, ranks nearby hospitals that offer the right services, and asks the best one. If that hospital declines or does not reply within two minutes, the request moves to the next one automatically, and everyone sees the same live timeline.
 
-> **This is a prototype.** Hospitals, bed counts and staff are simulated and labelled as such. The priority rules are not a validated clinical triage tool. In a real emergency, call 112.
+It implements the paper *JeevanSetu: A Machine-Learning-Assisted Emergency Response Framework* (Nancy Verma, Satyam Pandey, Mohit Paliwal, Nandini Tomar, Mukesh Kumar Bhardwaj; Dept. of CSE (AI & ML), Dronacharya Group of Institutions, Greater Noida).
 
-## Feature list status
+> [!IMPORTANT]
+> This is a prototype. Hospitals, bed counts and staff are **simulated** and labelled as such. The priority rules are not a validated clinical triage tool, and the wound-photo model is informational only. **In a real emergency, call 112.**
 
-All **[MVP]** items are built and tested. **[V2]** items marked "Done" are built and tested; the others are the next batch. **[FUTURE]** items have data hooks (empty tables in the store) and a clearly labelled "Coming soon" page (`/coming-soon`). No ML or unvalidated feature changes priority or routing.
+<p align="center">
+  <img src="docs/screens/demo.png" alt="Demo page with one-click sign-in for citizen, hospital staff and administrator" width="90%">
+</p>
 
-These features run in the portable Node server (`server/`), which is the default. The Python backend keeps the paper's core features only.
+## Contents
 
-| # | Feature | Tag | Status |
-| --- | --- | --- | --- |
-| 1–10 | SOS home, 3-step report, OTP, draft, idempotency, live timeline, "Why this hospital?" (with data freshness), red-flag and no-hospital states, photo quality gate, Hindi/English, practice drill, first aid | MVP | Done |
-| 11 | Share live status with family (view-only link, expires after 24 h or 2 h after closing) | MVP | Done |
-| 12 | Voice input for the report | V2 | Not yet |
-| 13 | Offline-first PWA with queued report | V2 | Not yet |
-| 14 | SMS SOS fallback | V2 | Not yet |
-| 15 | Emergency Passport (shared only with consent) | V2 | Done |
-| 16 | Patient-side access log | V2 | Done |
-| 17 | Elder / icon-based / high-contrast modes | V2 | Not yet (WCAG AA basics are in place) |
-| 18 | Good Samaritan mode | V2 | Not yet |
-| 19 | Multi-patient report | V2 | Not yet |
-| 20 | Outcome feedback | V2 | Done |
-| 21–23 | Crash detection, CPR volunteers, blood network | FUTURE | Placeholder + data hooks |
-| 24–26 | Staff queue with alerts, case drawer with map and Grad-CAM, one-tap resources and diversion | MVP | Done |
-| 27 | Pre-arrival QR packet that opens the case when scanned (`/staff/cases/:id`) | MVP | Done |
-| 28 | "Patient arrived" confirmation (new final status `PATIENT_ARRIVED`) | MVP | Done |
-| 29–33 | Capability truth panel, referral, voice note, shift notes, payment filter | V2 | Not yet |
-| 34–35 | Driver mini-app, live ambulance location | V2 | Not yet |
-| 36 | Green corridor | FUTURE | Placeholder + data hook |
-| 37 | Overview metrics with accept rate and reply time per hospital | MVP | Done |
-| 38–39 | Hospital and staff management, audit log, CSV export; reliability score | MVP | Done |
-| 40 | Ranking what-if sandbox | V2 | Done |
-| 41 | Refusal analytics (by reason, hospital and area) | V2 | Done |
-| 42 | Public accountability scorecard (`/scorecard`) | V2 | Done |
-| 43 | Fairness monitor (by area and time of day) | V2 | Done |
-| 44 | Surge / disaster mode | V2 | Not yet |
-| 45 | Post-incident report per case (print or save as PDF) | V2 | Done |
-| 46–47 | Bed predictor, black-spot heatmap | FUTURE | Placeholder |
-| 48 | Data freshness confidence (age and decay on every figure; stale gets zero) | MVP | Done |
-| 49 | Prank shield: OTP, report rate limit, admin-only trust score; red-flag 112 screen never blocked | MVP | Done |
-| 50–52 | Role and ownership checks, 404 across hospitals, image audit, metadata stripping, labels for simulated and ML items | MVP | Done |
-| 53 | Sensitive case mode (minimum-detail alerts) | V2 | Done |
-| 54 | Data retention controls and consent withdrawal | V2 | Not yet |
-| 55 | Quality gate, MobileNetV2 behind a replaceable interface, abstention, Grad-CAM | MVP | Done |
-| 56–57 | OOD detection, acute-injury classifier | FUTURE | Placeholder |
-| 58 | Alerts through pluggable providers (SMS, WhatsApp, push, in-app; mock outbox in admin) | MVP | Done |
-| 59 | Real-time updates with Server-Sent Events (polling kept as fallback) | MVP | Done |
-| 60 | Seed data, demo users, README | MVP | Done |
-| 61 | Road-network ETA (OSRM) | V2 | Not yet |
+- [What it does](#what-it-does)
+- [How it works](#how-it-works)
+- [Wound-photo model](#wound-photo-model)
+- [Quick start](#quick-start)
+- [Deploy online](#deploy-online)
+- [Feature list status](#feature-list-status)
+- [Tests](#tests)
+- [Security and privacy](#security-and-privacy)
+- [Project structure](#project-structure)
+- [Limitations](#limitations)
 
-## Quick start (Windows, Mac or Linux)
+## What it does
 
-You only need **Node.js 20 LTS or newer** (nodejs.org). Python is not required to run the app.
+### Citizen app (mobile-first, English and Hindi)
 
-Open the `jeevansetu` folder in VS Code, open a terminal (Ctrl + `) and run:
+<p align="center"><img src="docs/screens/citizen-report.png" alt="Citizen home, symptom questions, red-flag screen and live status" width="100%"></p>
+
+- **One-tap SOS** with a Call 112 button on every screen.
+- **Three-step report.**
+  - Step 1: injury type, plus optional patient details and **voice input**.
+  - Step 2: symptom questions answered **Yes / No / Unknown**. Unknown is never read as No.
+  - Step 3: location by GPS, map pin or typed coordinates, with **versioned consent**.
+  - The draft saves as you type, and an idempotency key stops double submits.
+- **Red-flag takeover.** Any danger sign fills the screen with a single large Call 112 button.
+- **Live status.** Shows the current hospital, the reply countdown and reassignment notices, and updates the moment anything changes. **"Why this hospital?"** shows every term of the score, plus how fresh the bed data is.
+- **Optional photo** with a quality gate that rejects photos that are too dark, too bright or blurred.
+
+<p align="center"><img src="docs/screens/citizen-more.png" alt="Emergency Passport, family link, nearby hospitals, Hindi and Simple mode" width="100%"></p>
+
+- **Emergency Passport.** Blood group, allergies, conditions and emergency contacts, shared only with consent.
+- **Family live link.** View-only and without patient details. It expires on its own.
+- **Hospitals near you.** A map and a list with call and directions buttons.
+- **Patient-side access log.** Shows which staff opened the case, and when.
+- **Practice drill, first aid, outcome feedback.**
+- **Accessibility.** Simple mode with three big buttons, larger text, and high contrast.
+
+### Hospital staff dashboard
+
+<p align="center"><img src="docs/screens/staff-dashboard.png" alt="Hospital dashboard with beds, services, live readiness and the request queue" width="90%"></p>
+
+- **Incoming queue.** Red flags first, with live timers and a sound alert.
+- **One-tap resource panel.** Beds, services and diversion. Every figure shows its age and a confidence level.
+- **Capability Truth Panel.** Staff confirm a trauma surgeon on call, a free OT, blood and a free ventilator. Each confirmation expires after two hours.
+- **Shift handover notes.**
+
+<p align="center"><img src="docs/screens/staff-case.png" alt="Case drawer with pre-arrival packet, patient map, internal comments and the wound photo with Grad-CAM" width="90%"></p>
+
+- **Case drawer:**
+  - priority reasons with the rule-set version
+  - the pre-arrival packet, with a **QR code that opens the case when scanned at the gate**
+  - a patient map with directions
+  - internal comments
+  - the photo with the model's preliminary prediction and **Grad-CAM** heat-map
+- **Accept** (key A), **Decline with a reason** (key D), then **Patient arrived** to close the loop.
+
+### Admin console
+
+<p align="center"><img src="docs/screens/admin-overview.png" alt="Admin overview: metrics, surge mode, wound-model card and hospital performance" width="90%"></p>
+
+- **Overview metrics.** Accept rate and reply time for each hospital, and the wound-model test results.
+- **Surge / disaster mode.** A broadcast message plus a temporarily wider search radius.
+- **Requests, hospitals, staff and audit log**, with filters and CSV export. Each request shows a reporter trust score that only admins can see.
+- **Notifications outbox.** Mock SMS, WhatsApp, push and in-app providers, with phone numbers masked.
+
+<p align="center"><img src="docs/screens/admin-insights.png" alt="Insights: refusal reasons, area and time-of-day fairness, feedback, and the ranking what-if sandbox" width="90%"></p>
+
+- **Insights:** refusal reasons, area and time-of-day fairness, citizen feedback, and a **what-if sandbox**. The sandbox replays past requests with different ranking weights and changes nothing live.
+- **Post-incident case report** for every request, which you can print or save as PDF. A **public scorecard** at `/scorecard` shows anonymous totals.
+
+<p align="center"><img src="docs/screens/case-report.png" alt="Printable post-incident case report" width="70%"></p>
+
+## How it works
+
+```mermaid
+flowchart TD
+    A[Citizen reports: injury, symptoms Yes/No/Unknown, location, consent] --> B{Any danger sign = Yes?}
+    B -- yes --> C[Full-screen Call 112<br/>report can still be sent]
+    C --> D
+    B -- no --> D[Server: priority rules, stored reasons, rule-set version]
+    D --> E[Keep hospitals that offer the needed services,<br/>are within the radius and not on diversion]
+    E --> F{Any hospital left?}
+    F -- no --> G[NO_SUITABLE_HOSPITAL<br/>advise to call 112]
+    F -- yes --> H[Ask the best-scoring hospital<br/>reply due in 2 minutes]
+    H --> I{Hospital reply}
+    I -- accept --> J[Bed held, address shown to reporter]
+    J --> K[Staff confirm: patient arrived]
+    I -- decline or timeout --> E
+```
+
+**Ranking.** Each eligible hospital *h* gets an additive score from distance *d*, reported free beds *b* and a small reliability term *r* (Eq. 8 of the paper, plus the reliability term):
+
+$$
+s(h) = w_d\left(1-\frac{d_h}{D_{max}}\right) + w_r\,\frac{\min(b_h, b_{cap})}{b_{cap}} + w_{rel}\,r_h
+\qquad w_d=0.7,\ w_r=0.3,\ w_{rel}=0.05,\ b_{cap}=5,\ D_{max}=25\text{ km}
+$$
+
+A bed count that is missing or older than six hours still lets the hospital qualify, but it earns zero on the bed term and is flagged. The seeded hospitals reproduce the paper's worked example exactly (scores 0.776, 0.621 and 0.366).
+
+**Safe reassignment.** No hospital is asked twice about the same request, and a request has at most one pending or accepted hospital at a time. Two simultaneous clicks, or a click racing the timeout, give one success and one HTTP 409.
+
+```mermaid
+stateDiagram-v2
+    [*] --> SUBMITTED
+    SUBMITTED --> FINDING_HOSPITAL
+    FINDING_HOSPITAL --> AWAITING_HOSPITAL_RESPONSE: hospital found
+    FINDING_HOSPITAL --> NO_SUITABLE_HOSPITAL: none left
+    AWAITING_HOSPITAL_RESPONSE --> FINDING_HOSPITAL: declined or timed out
+    AWAITING_HOSPITAL_RESPONSE --> HOSPITAL_ACCEPTED: accepted
+    HOSPITAL_ACCEPTED --> PATIENT_ARRIVED: staff confirm arrival
+    SUBMITTED --> CANCELLED
+    FINDING_HOSPITAL --> CANCELLED
+    AWAITING_HOSPITAL_RESPONSE --> CANCELLED
+    NO_SUITABLE_HOSPITAL --> [*]
+    PATIENT_ARRIVED --> [*]
+    CANCELLED --> [*]
+```
+
+**Architecture.** One React client, one REST API, and modules for each concern. Screens update instantly through Server-Sent Events, with polling as a fallback.
+
+```mermaid
+flowchart LR
+    subgraph Client [React + TypeScript]
+      C1[Citizen app] --- C2[Staff dashboard] --- C3[Admin console]
+    end
+    Client -- REST + live events --> API[API: session cookie,<br/>role and ownership checks]
+    API --> P[Priority rules]
+    API --> R[Ranking + reassignment<br/>+ timeout checker]
+    API --> I[Image gate + ONNX model<br/>informational only]
+    API --> N[Alerts: SMS / WhatsApp / push<br/>pluggable, mock in demo]
+    API --> DB[(Data store + audit log)]
+```
+
+## Wound-photo model
+
+The model is **MobileNetV2**, trained on the public **AZH wound dataset**. The dataset has four chronic wound classes: diabetic, pressure, surgical and venous ulcers. Training uses two-stage transfer learning and a class-weighted loss. When the model isn't confident enough, it answers **"Uncertain"** (abstention) instead of guessing. The model runs inside the Node server through ONNX Runtime Web (WebAssembly), and the Grad-CAM heat-map is computed from the last feature map. **Its output is never used for priority or hospital choice.**
+
+| Backbone | Params | Test accuracy | Test macro-F1 | CPU time per photo |
+| --- | --- | --- | --- | --- |
+| **MobileNetV2** (used) | 2.23 M | **64.1%** | **0.628** | **24.9 ms** |
+| EfficientNet-B0 | 4.01 M | 67.4% | 0.657 | 50.4 ms |
+| ResNet-50 | 23.52 M | 62.5% | 0.592 | 120.6 ms |
+
+These results come from one run on Kaggle (T4 GPU, seed 42) on the official test set: 464 training, 82 validation and 184 test images. With the abstention threshold τ = 0.63 chosen on validation data, MobileNetV2 answers 81.0% of test photos, at 69.1% accuracy. Pressure ulcers are the hardest class (F1 0.427). With so few images, accuracy moves by several points between runs; the paper's earlier run gave 71.7%.
+
+<p align="center"><img src="docs/screens/ml-results.png" alt="Confusion matrix and backbone comparison" width="85%"></p>
+
+**Train it yourself (about 10 minutes, free):**
+1. Upload [`ml/JeevanSetu_Train_Wound_Model.ipynb`](ml/JeevanSetu_Train_Wound_Model.ipynb) to Kaggle (Create → New Notebook → File → Import Notebook).
+2. Set **Accelerator: GPU** and **Internet: On**, then click **Run All**. The notebook downloads the dataset by itself.
+3. Copy `wound_model.onnx` and `wound_model.json` from the `jeevansetu_model.zip` it produces into `server/models/`, and restart the app.
+
+## Quick start
+
+You only need **Node.js 20+**.
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open **http://localhost:5173/demo** and click a role to sign in with a demo account. Keep the terminal open; Ctrl + C stops everything.
+Open **http://localhost:5173/demo** and click a role.
 
-For a presentation, build once and serve everything from one address:
+For a presentation, build once and serve everything from one port with `npm start`, then open **http://localhost:8000/demo**. `npm run reset` clears all saved data; the demo data comes back on the next start.
 
-```bash
-npm start
-```
-
-Then open **http://localhost:8000/demo**. Other commands:
-
-| Command | What it does |
+| Role | Account |
 | --- | --- |
-| `npm run reset` | Deletes all saved data. The demo hospitals and accounts come back on the next start. |
-| `npm test` | 14 tests: priority rules, Table VIII ranking, Algorithm 1, the ONNX analyzer, and API integration tests for the newer features |
-| `npm run e2e` | 9 browser tests of the whole app (run `npx playwright install chromium` in `frontend` once first) |
+| Citizen | Mobile `98110 24521`. The 6-digit code is shown on screen in the demo; no SMS is sent. |
+| Hospital staff | `staff.h3@jeevansetu.demo` / `Demo@2026!` (Pari Chowk Trauma Centre). `staff.h1` to `staff.h5` cover the other hospitals. |
+| Admin | `admin@jeevansetu.demo` / `Admin@2026!` |
 
-### Why there are two servers
+<details>
+<summary><b>Seeded hospitals (simulated, Greater Noida)</b></summary>
 
-| Folder | Server | When to use it |
-| --- | --- | --- |
-| `server/` | **Portable Node.js server.** Pure JavaScript with no compiled add-ons, saving data to a JSON file in `server/data/`. | Default. It runs on locked-down Windows laptops where Smart App Control blocks compiled Python packages. |
-| `backend/` | **FastAPI reference backend** described in the paper: SQLAlchemy, Alembic migrations, Argon2id, 78 pytest tests and the MobileNetV2 analyzer. | When Python with compiled packages is allowed (Linux, Mac, GitHub Codespaces, or Windows with Smart App Control off). |
+They are placed at the distances of the paper's worked example (Table VIII), measured from a patient near Alpha-1.
 
-Both expose the same `/api`, so the frontend works with either. The portable server uses Node's built-in scrypt for passwords and has no wound model, so photos are checked and stored but marked "Not analysed".
+| Hospital | Distance | Services | Free beds |
+| --- | --- | --- | --- |
+| Sector Beta-2 City Hospital | 2.00 km | Emergency, orthopaedics, cardiac | 4 |
+| Alpha Care Hospital | 4.98 km | Emergency, trauma | 1 |
+| Pari Chowk Trauma Centre | 8.01 km | Emergency, trauma, orthopaedics | 6 |
+| Knowledge Park Medical Centre | 11.93 km | Emergency, trauma, burn | not reported |
+| Dadri Road Hospital | 30.02 km | Emergency, trauma, burn, cardiac | 8 |
+</details>
 
-### What is in the box
+<details>
+<summary><b>Two-minute demo</b></summary>
 
-| Part | Stack |
-| --- | --- |
-| `frontend/` | React 18, TypeScript, Vite, Tailwind CSS, React Router, TanStack Query, Leaflet with OpenStreetMap, react-i18next (English and Hindi), Lucide icons, Vitest, Playwright |
-| `server/` | Node.js (built-in `http` and `crypto`), jpeg-js and pngjs for the photo quality gate |
-| `backend/` | Python 3.11+, FastAPI, SQLAlchemy 2, Alembic, Pydantic 2, Argon2id, SQLite (PostgreSQL-ready), pytest |
-| `backend/ml/` | Training script for the MobileNetV2 wound analyzer (PyTorch, timm) |
+1. On `/demo`, choose **Citizen**. Report a road accident near Greater Noida, tick consent and send. The request goes to Pari Chowk Trauma Centre; tap **Why this hospital?** to see the score.
+2. In a private window, choose **Hospital staff**. Open the request, press **D**, pick a reason and decline.
+3. Back as the citizen, the request has moved to **Alpha Care Hospital** on its own.
+4. As staff of that hospital (`staff.h2@jeevansetu.demo`), accept it, then press **Patient arrived**.
+5. As **Administrator**, look at the metrics, **Insights** (run the what-if sandbox), **Notifications** and the case **Report**.
+</details>
 
-## Running the Python backend instead (optional)
+<details>
+<summary><b>Optional: the FastAPI reference backend</b></summary>
+
+`backend/` holds the paper's reference implementation: FastAPI, SQLAlchemy, Alembic, Argon2id and 78 pytest tests. It covers the paper's core features. The newer features run in the portable Node server in `server/`, which needs no compiled add-ons and so also works on locked-down Windows laptops.
 
 ```bash
 cd backend
-python -m venv .venv
-.venv\Scripts\Activate.ps1          # Mac/Linux: source .venv/bin/activate
+python -m venv .venv && source .venv/bin/activate      # Windows: .venv\Scripts\Activate.ps1
 python -m pip install -e ".[dev]"
-copy .env.example .env               # Mac/Linux: cp
-python -m alembic upgrade head
-python -m app.seed
+cp .env.example .env
+python -m alembic upgrade head && python -m app.seed
 python -m pytest
 python -m uvicorn app.main:app --reload --port 8000
 ```
+</details>
 
-Then, in a second terminal: `cd frontend` and `npm run dev`. If Windows reports *"An Application Control policy has blocked this file"*, Smart App Control is on. Use the portable server, GitHub Codespaces, or turn Smart App Control off.
+## Deploy online
 
-### Demo accounts
+The server must keep running: it checks reply timeouts every 5 seconds and pushes live updates. So it is hosted on **Render**, and **Vercel** serves the website.
 
-| Role | Sign in at | Credentials |
-| --- | --- | --- |
-| Citizen | `/login` | Mobile `98110 24521`. In dev the 6-digit code is shown on screen; no SMS is sent. Any valid Indian mobile number also works and creates a new citizen. |
-| Hospital staff | `/staff/login` | `staff.h3@jeevansetu.demo` / `Demo@2026!` (Pari Chowk Trauma Centre). `staff.h1` to `staff.h5` cover the other four hospitals. |
-| Admin | `/staff/login` | `admin@jeevansetu.demo` / `Admin@2026!` |
+1. **Render (server).** New → Blueprint → choose this repository. `render.yaml` sets everything up. Check that `https://<your-app>.onrender.com/api/health` returns `{"status":"ok"}`.
+2. **Vercel (website).** Add New → Project → this repository, with **Root Directory** set to `frontend`. If your Render address is not `https://jeevansetu.onrender.com`, change it in [`frontend/vercel.json`](frontend/vercel.json) first.
 
-The `/demo` page signs in to any of these with one click.
+Render's free plan sleeps after 15 minutes without visitors, and data resets on restart. Open the link a minute before a demo.
 
-### Seeded hospitals (all simulated)
+## Feature list status
 
-They sit at the distances used in Table VIII of the paper, measured from the demo patient location near Alpha-1, Greater Noida. A road-accident report from there reproduces the paper's worked example.
+All **[MVP]** items are built and tested. Of the **[V2]** items, 14 of 25 are built. **[FUTURE]** items have data hooks and a clearly labelled "Coming soon" page in the app (`/coming-soon`). No ML or unvalidated feature changes priority or routing.
 
-| Key | Hospital | Distance | Services | Free beds |
-| --- | --- | --- | --- | --- |
-| H1 | Sector Beta-2 City Hospital | 2.00 km | Emergency, orthopaedics, cardiac | 4 |
-| H2 | Alpha Care Hospital | 4.98 km | Emergency, trauma | 1 |
-| H3 | Pari Chowk Trauma Centre | 8.01 km | Emergency, trauma, orthopaedics | 6 |
-| H4 | Knowledge Park Medical Centre | 11.93 km | Emergency, trauma, burn | not reported |
-| H5 | Dadri Road Hospital | 30.02 km | Emergency, trauma, burn, cardiac | 8 |
-
-### A two-minute demo
-
-1. Open `/demo` and choose **Citizen**. Tap **Report an emergency**, choose **Road accident**, answer the questions, use your location (or tap the map near Greater Noida), tick consent and send.
-2. In a private window, open `/demo` and choose **Hospital staff**. The request is at the top of the table. Open it, press **D**, choose a reason and decline.
-3. Back on the citizen screen, the request has moved to Alpha Care Hospital, with a notice saying why.
-4. Choose **Administrator** on `/demo` to see the metrics, filters, CSV export and audit log.
+| # | Feature | Tag | Status |
+| --- | --- | --- | --- |
+| 1–11 | SOS home, 3-step report, OTP, draft, idempotency, live timeline, "Why this hospital?", red-flag and no-hospital states, photo gate, Hindi/English, practice drill, first aid, family share link | MVP | ✅ Done |
+| 12 | Voice input (Hindi/English speech-to-text, user confirms) | V2 | ✅ Done (Chrome / Edge) |
+| 13 | Offline-first PWA | V2 | ⬜ Next |
+| 14 | SMS SOS fallback | V2 | ⬜ Next |
+| 15 | Emergency Passport | V2 | ✅ Done |
+| 16 | Patient-side access log | V2 | ✅ Done |
+| 17 | Accessibility modes | V2 | ✅ Simple mode, larger text, high contrast (icon-only mode next) |
+| 18 | Good Samaritan mode | V2 | ⬜ Next |
+| 19 | Multi-patient report | V2 | ⬜ Next |
+| 20 | Outcome feedback | V2 | ✅ Done |
+| 21–23 | Crash detection, CPR volunteers, blood network | FUTURE | 🔜 Placeholder + data hooks |
+| 24–28 | Staff queue with alerts, case drawer with map and Grad-CAM, resources and diversion, QR that opens the case, "Patient arrived" | MVP | ✅ Done |
+| 29 | Capability Truth Panel (expires after 2 h) | V2 | ✅ Done |
+| 30 | Inter-hospital referral | V2 | ⬜ Next |
+| 31 | Handover voice note | V2 | ⬜ Next |
+| 32 | Shift handover notes and case comments | V2 | ✅ Done |
+| 33 | Payment / scheme filter | V2 | ⬜ Next |
+| 34–35 | Driver mini-app, live ambulance location | V2 | ⬜ Next |
+| 36 | Green corridor | FUTURE | 🔜 Placeholder |
+| 37–39 | Metrics per hospital, management, audit log, CSV, reliability score | MVP | ✅ Done |
+| 40–43 | What-if sandbox, refusal analytics, public scorecard, fairness monitor | V2 | ✅ Done |
+| 44 | Surge / disaster mode | V2 | ✅ Done |
+| 45 | Post-incident case report | V2 | ✅ Done |
+| 46–47 | Bed predictor, black-spot heatmap | FUTURE | 🔜 Placeholder |
+| 48–52 | Data freshness confidence, prank shield, access checks, metadata stripping, labels | MVP | ✅ Done |
+| 53 | Sensitive case mode | V2 | ✅ Done |
+| 54 | Data retention and consent withdrawal | V2 | ⬜ Next |
+| 55 | Quality gate, replaceable MobileNetV2, abstention, Grad-CAM | MVP | ✅ Done |
+| 56–57 | OOD detection, acute-injury classifier | FUTURE | 🔜 Placeholder |
+| 58–60 | Pluggable alerts, real-time updates (SSE), seed data and README | MVP | ✅ Done |
+| 61 | Road-network ETA (OSRM) | V2 | ⬜ Next |
 
 ## Tests
 
 ```bash
-npm test                             # Node: priority rules, Table VIII example, Algorithm 1
-cd backend && python -m pytest       # 78 tests: rules, ranking, Algorithm 1, auth, images, admin, migrations
-cd frontend && npm test              # Vitest: formatting, and English/Hindi key and placeholder parity
-cd frontend && npx playwright install chromium && npm run e2e
+npm test                     # 15 Node tests: rules, Table VIII ranking, Algorithm 1, ONNX analyzer, API integration
+npm run e2e                  # 10 Playwright browser tests (run `npx playwright install chromium` in frontend once)
+cd frontend && npm test      # 6 Vitest tests: formatting, English/Hindi key parity
+cd backend && python -m pytest   # 78 tests for the FastAPI reference backend
 ```
 
-`npm run e2e` starts the whole stack itself: the portable server with fresh demo data on port 8000, and a production build on port 4173. It runs 7 browser tests:
-
-- citizen report to trauma centre, including the "Why this hospital?" terms;
-- red-flag takeover and undo;
-- practice drill;
-- Hindi switch;
-- staff decline and reassignment;
-- cross-hospital 404;
-- admin CSV export.
-
-Stop anything already on ports 8000 and 4173 first.
-
-### Where each required test lives
-
-| Requirement | Test (Python reference backend; the Node server repeats the core ones in `server/test/`) |
-| --- | --- |
-| Every priority rule, age boundaries, unknown never read as no | `backend/tests/test_priority.py` |
-| Haversine, filtering, scoring, Table VIII example, stale availability | `backend/tests/test_ranking.py` |
-| Consent required, double-submit idempotency | `backend/tests/test_emergencies.py` |
-| Reject to next hospital, timeout to next hospital, no candidates left, simultaneous accepts (one 409), cross-hospital 404 with audit | `backend/tests/test_allocation_flow.py` |
-| Corrupt image, blurred image, low-confidence image (UNCERTAIN), metadata stripped, model never changes priority or routing | `backend/tests/test_images.py` |
-| Session token stored only as a hash, logout revokes, role guards | `backend/tests/test_auth.py` |
-
-## Screens
-
-**Citizen.** Mobile-first at 360 px, centred at 480 px on larger screens. A Call 112 button is on every screen.
-
-1. **Home.** The SOS button and Call 112 sit at the bottom, within thumb reach. Below them are "My requests" with live status and a first-aid link. The top bar has the language switch and the Practice toggle.
-2. **Report, three steps.** Step 1 asks what happened, with optional patient details behind a toggle. Step 2 is the symptom questions, each with Yes / No / Unknown; Unknown is drawn in neutral grey and skipped questions are sent as Unknown. Step 3 is the location (GPS, map pin or typed coordinates, with the source stored) and the consent checkbox with its version. The draft saves on the phone as you go, and the same idempotency key is reused if sending is retried.
-3. **Red-flag takeover.** Answering Yes to any danger sign fills the screen red with one large Call 112 button. Two smaller choices sit under it: send to a hospital anyway, or undo a mis-tap.
-4. **Live status.**
-   - A collapsible map sits at the top.
-   - The current-hospital card stays pinned, with a countdown and "Why this hospital?". That panel shows each term of Eq. 8 with its weight, plus the reliability term and the services the injury needs.
-   - A notice explains any reassignment, and the timeline below lists every event.
-   - Cancel asks for confirmation first, and a photo can be added (optional).
-   - Accepted, no-hospital and cancelled requests each have their own state.
-5. **Photo upload.** Separate from the report, so it can never delay it. If the gate rejects a photo, the message says why: too dark, too bright, blurred, wrong type or too large.
-6. **Phone sign-in** with a one-time code.
-7. **First aid.** Static steps for each injury type, under a Call 112 banner. No model output is used.
-8. **Hospitals near you.** A map and a list ordered by distance, each with its services, a call button and driving directions. The map also says clearly when street tiles cannot load without internet.
-9. **Practice drill.** Runs the real rules and ranking through an endpoint that writes nothing, then shows a simulated hospital reply.
-
-**Hospital staff.** Desktop-first and usable on a tablet.
-
-9. **Incoming requests.**
-   - A side menu sits next to the beds-and-services panel: one-tap bed count, service toggles and the Diversion switch.
-   - The table has a sticky header, sorts red flags first, shows priority as an icon plus text, and has live waiting and reply-due timers.
-   - Tabs list pending, accepted and declined requests.
-   - A new red flag raises a banner and an optional two-tone sound.
-10. **Case drawer.**
-    - Priority reasons with the rule-set version.
-    - The pre-arrival packet: age, sex, blood group, allergies, contact and location, with a QR code holding the same data.
-    - A map of the patient's location against your hospital, with a directions link.
-    - Photos with a Grad-CAM toggle and the "Preliminary, not a diagnosis" label.
-    - Accept (**A**) or Decline (**D**). A decline needs a reason, and Esc closes the drawer.
-
-**Admin.**
-
-11. **Overview.** A wound-model card with its test accuracy, plus four metrics: requests by status, median hospital reply time, accept rate and no-hospital cases. Below them are tabs for Requests, Map (hospitals and requests still being placed), Hospitals, Staff and Audit log, each with filters and CSV export. Admins can add staff accounts, deactivate them, and switch hospitals open or on diversion.
-
-Every screen has a loading skeleton shaped like its content, plus empty, error and offline states.
-
-## How it maps to the paper
-
-| Paper | Code |
-| --- | --- |
-| Table I priority rules, stored reasons, rule-set version | `backend/app/features/priority/engine.py` |
-| Table II required services | `backend/app/features/allocation/capabilities.py` |
-| Eq. 6–7 haversine distance | `backend/app/features/allocation/geo.py` |
-| Eq. 8 eligibility filter and additive score (wd 0.7, wr 0.3, bcap 5, Dmax 25 km) | `backend/app/features/allocation/ranking.py` |
-| Algorithm 1: REASSIGN, DECIDE, periodic timeout | `backend/app/features/allocation/service.py`, `worker.py` |
-| Unique (request, hospital) key; at most one pending or accepted assignment per request | `backend/app/features/allocation/models.py`, migration `0001` |
-| Eq. 1 blur check and exposure check | `backend/app/features/images/quality.py` |
-| Eq. 2–5 classifier, abstention threshold τ, Grad-CAM | `backend/app/features/images/mobilenet.py`, `analyzer.py` |
-| Fig. 2 status lifecycle | `backend/app/core/enums.py` |
-
-**Additions beyond the paper:**
-- A small **reliability term** (weight 0.05) built from each hospital's accept rate and median reply time. New hospitals start at a neutral 0.5, and the term is stored with every assignment.
-- **Diversion**, which removes a hospital from ranking.
-- The **practice drill** and the **pre-arrival QR code**.
+The browser tests cover:
+- a report reaching the trauma centre, with the score terms
+- the red-flag takeover
+- the practice drill and the Hindi switch
+- decline and reassignment
+- cross-hospital 404
+- the family link, accept and arrival
+- the access log, notifications and the what-if sandbox
+- surge mode and Simple mode
 
 ## Security and privacy
 
-- **Accounts and sessions.** Passwords are hashed with Argon2id. Sessions use a random token in an httpOnly, SameSite=Strict cookie, and only its SHA-256 hash is stored, so signing out takes effect immediately. Phone codes are HMAC-hashed, expire after 5 minutes, allow a limited number of attempts, and are rate-limited per number.
-- **Access checks.** Role and ownership are checked on the server for every endpoint. A request from another hospital or another citizen returns 404, so its existence is not revealed.
-- **Concurrency.** Decisions use conditional updates; a losing click or a racing timeout gets 409.
-- **Images.** The file's real content is checked (not its name), size is capped at 5 MB, and the image is re-encoded, which drops EXIF and GPS data. Files are kept in a private folder and served only through an authorised route, and every view is audit-logged.
-- **Logs and consent.** Audit logs hold identifiers only. Consent is stored with its text version and timestamp.
+- **Sessions.** A random token in an httpOnly, SameSite=Strict cookie; only its hash is stored. Passwords use scrypt (Argon2id in the FastAPI backend). Sign-in codes are hashed, expire after 5 minutes and are rate-limited.
+- **Access.** Role and ownership are checked on every request. Another hospital's or citizen's case returns **404**, and the attempt is audit-logged.
+- **Images.** The real file content is checked. Photos are re-encoded, which removes EXIF and GPS data, kept privately, and every view is audit-logged.
+- **Sharing.** The family link carries no patient details. The Emergency Passport is shared only with consent. In sensitive cases, alerts carry no names.
+- **Abuse.** Reports are rate-limited per hour, and a reporter trust score is visible only to admins. The red-flag Call 112 screen appears on the phone before sending, so it is never blocked.
 
-## The wound-photo model (train it on Kaggle)
+## Project structure
 
-**Dataset:** the public **AZH wound dataset** (UWM BigData Lab, AZH Wound and Vascular Center). It is on GitHub, not Kaggle: https://github.com/uwm-bigdata/Multi-modal-wound-classification-using-images-and-locations. The notebook uses the four wound classes (diabetic, pressure, surgical, venous) and the official split: 464 training, 82 validation and 184 test images. Background and normal-skin images are left out, as in the paper.
-
-**Train it (about 10 minutes, free GPU, nothing to install on your laptop):**
-
-1. Go to kaggle.com, then **Create → New Notebook → File → Import Notebook**, and upload `ml/JeevanSetu_Train_Wound_Model.ipynb`.
-2. In the right panel set **Accelerator → GPU T4 x2** (or P100) and switch **Internet on**. Kaggle asks you to verify your phone number once.
-3. Click **Run All**. The last cell prints the test accuracy, macro-F1, coverage and selective accuracy.
-4. Download **`jeevansetu_model.zip`** from the Output panel.
-5. Copy `wound_model.onnx` and `wound_model.json` from it into `server/models/`, then restart the app (`npm run dev` or `npm start`).
-
-After that:
-- The terminal says `Wound model: loaded`.
-- The admin console shows the model's test results.
-- Staff see a prediction (or "Uncertain") and can switch on the Grad-CAM view for each photo.
-
-Google Colab works the same way (Runtime → Change runtime type → T4 GPU → Run all).
-
-The model runs inside the portable server through ONNX Runtime Web (WebAssembly), so it needs no compiled files and works on locked-down Windows laptops. The zip also contains `mobilenetv2_azh.pt` for the Python backend (`backend/ml/weights/`).
-
-**Our results (Kaggle, T4 GPU, seed 42).** MobileNetV2: 64.1% test accuracy, macro-F1 0.628; with abstention (tau 0.63) it answers 81.0% of test photos at 69.1% accuracy; 24.9 ms per photo on one CPU core. EfficientNet-B0: 67.4%, macro-F1 0.657, 50.4 ms. ResNet-50: 62.5%, macro-F1 0.592, 120.6 ms. The paper's earlier run of the same protocol gave MobileNetV2 71.7%; with only 464 training images, results move by several points between runs. The model's output is always preliminary and never changes priority or hospital choice.
-
-## Switching to PostgreSQL
-
-```bash
-pip install -e ".[postgres]"
-export JS_DATABASE_URL=postgresql+psycopg://user:password@localhost:5432/jeevansetu
-alembic upgrade head && python -m app.seed
+```
+package.json        npm install / npm run dev / npm start for the whole project
+server/             portable Node.js server (default)
+  lib/              priority rules, ranking, Algorithm 1, freshness, alerts, live events, ONNX analyzer
+  routes/           auth, citizen, staff, admin, extra (share, passport, insights, surge)
+  models/           put wound_model.onnx and wound_model.json here
+  test/             node:test unit and API tests
+frontend/           React + TypeScript + Vite + Tailwind
+  src/features/     citizen, staff, admin, public (track, scorecard, coming soon), demo
+  e2e/              Playwright tests
+ml/                 Kaggle / Colab training notebook
+backend/            FastAPI reference backend from the paper
+docs/               README images
+render.yaml         Render blueprint
 ```
 
-The schema avoids SQLite-only features. The partial unique index is declared for both databases.
+## Limitations
 
-## Settings
-
-All settings use the `JS_` prefix (see `backend/.env.example` and `backend/app/core/config.py`). The ones you are most likely to change:
-
-| Setting | Default | Meaning |
-| --- | --- | --- |
-| `JS_DATABASE_URL` | `sqlite:///./jeevansetu.db` | Database |
-| `JS_REPLY_TIMEOUT_SECONDS` | `120` | How long a hospital has to reply |
-| `JS_EXPOSE_DEV_OTP` | `true` | Return the sign-in code in the API response. **Set to false outside development.** |
-| `JS_COOKIE_SECURE` | `false` | **Set to true behind HTTPS.** |
-| `JS_OTP_PEPPER` | dev value | **Change before any real use.** |
-| `JS_RUN_TIMEOUT_CHECKER` | `true` | Background timeout loop. It assumes a single API process. |
-| `JS_IMAGE_STORE_DIR` | `./private_images` | Private photo store |
-
-## Known limitations
-
-These are the same limitations the paper lists:
-
-- **The wound model does not match the use.** It is trained on chronic ulcers, not acute injuries.
-- **Nothing is validated or real.** The priority rules are unvalidated, and hospitals and beds are simulated.
+- **The wound model was trained on chronic ulcers**, not acute injuries, and accuracy varies between runs on this small dataset.
+- **Nothing here is validated or real.** The priority rules are unvalidated, and the hospitals, beds and staff are simulated.
 - **Distance is a straight line**, so roads and traffic are ignored.
-- **Updates are not pushed.** The client polls every 5 seconds, and the timeout checker assumes one server process.
-- **There is no link to ERSS 112** and no ambulance dispatch.
-- **No real SMS is sent.** The one-time code is shown on screen in development.
-
-## Folder layout
-
-```
-package.json             npm install / npm run dev / npm start for the whole project
-scripts/                 dev launcher and data reset
-server/                  portable Node.js server
-  lib/                   priority rules, ranking, Algorithm 1, images, security, JSON store, seed
-  routes/                auth, citizen, staff, admin
-  models/                put wound_model.onnx and wound_model.json here
-  test/                  node:test unit tests (fixtures/ holds a tiny random-weight model for tests only)
-ml/
-  JeevanSetu_Train_Wound_Model.ipynb   Kaggle / Colab notebook: AZH dataset, MobileNetV2, accuracy, export
-backend/
-  app/core/              settings, database, types, errors, security
-  app/features/
-    auth/                phone OTP, staff and admin password login, sessions
-    priority/            Table I engine
-    allocation/          geo, capabilities, ranking, reliability, Algorithm 1, timeout worker
-    emergencies/         citizen requests, consent, events
-    staff/               hospital queue, case detail, decisions, resources
-    images/              quality gate, private store, analyzer interface, MobileNetV2 + Grad-CAM
-    drill/               practice preview (writes nothing)
-    hospitals/           map pins
-    admin/               metrics, tables, CSV, staff and hospital management
-    audit/               audit log
-  migrations/            Alembic
-  ml/                    training script and weights folder
-  tests/
-frontend/
-  src/components/        Button, Badge, Card, Input, SegmentedControl, Timeline, Table,
-                         Drawer, Modal, Toast, Skeleton, Empty/Error states, OfflineBanner,
-                         Switch, MapView, Call112Button, LanguageToggle
-  src/features/          auth, citizen (home, report, status, first aid), drill, staff, admin
-  src/lib/               API client and types, i18n (en, hi), hooks, formatting, config
-  e2e/                   Playwright tests
-  tailwind.config.ts     design tokens: closed palette, type scale, radii
-```
+- **One server process is assumed** by the timeout checker. There is no link to ERSS 112 and no ambulance dispatch.
+- **No real messages are sent.** SMS and other alerts are mock providers, and the sign-in code is shown on screen in the demo.

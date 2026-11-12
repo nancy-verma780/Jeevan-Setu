@@ -4,6 +4,7 @@ import { audit } from "../lib/allocation.mjs";
 import { DEFAULT_PARAMS, rank } from "../lib/ranking.mjs";
 import { intParam } from "../lib/router.mjs";
 import { hashToken, newToken, normaliseIndianMobile } from "../lib/security.mjs";
+import { surge } from "../lib/settings.mjs";
 import { ownRequest } from "./citizen.mjs";
 
 const FINAL = ["PATIENT_ARRIVED", "CANCELLED", "NO_SUITABLE_HOSPITAL"];
@@ -153,6 +154,29 @@ export function registerExtra(router, store) {
       return { status: 201, body: row };
     },
     "citizen",
+  );
+
+  // ---- Surge / Disaster Mode ----
+  router.get("/api/broadcast", () => {
+    const s = surge(store);
+    return { body: s.active ? { active: true, message: s.message, radius_km: s.radius_km, started_at: s.started_at } : { active: false }, readOnly: true };
+  });
+  router.put(
+    "/api/admin/surge",
+    async (ctx) => {
+      const admin = ctx.user();
+      const b = await ctx.json();
+      const radius = Number(b.radius_km ?? 40);
+      if (!Number.isFinite(radius) || radius < 25 || radius > 60) throw invalid("The surge radius must be between 25 and 60 km.");
+      const message = String(b.message ?? "").trim().slice(0, 280);
+      if (b.active && !message) throw invalid("Write the message people will see.");
+      const s = surge(store);
+      const wasActive = s.active;
+      Object.assign(s, { active: Boolean(b.active), message, radius_km: radius, started_at: b.active ? (wasActive ? s.started_at : new Date().toISOString()) : null });
+      audit(store, admin.id, b.active ? "SURGE_ON" : "SURGE_OFF", "settings", 1);
+      return { body: s };
+    },
+    "admin",
   );
 
   // ---- Public accountability scorecard (aggregates only) ----

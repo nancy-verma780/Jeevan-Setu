@@ -2,6 +2,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { cx } from "@/components/ui/cx";
 import { Checkbox, Field, Input, Select, Textarea } from "@/components/ui/Input";
+import { VoiceButton } from "./VoiceButton";
 import type { Sex } from "@/lib/api/types";
 import { INJURY_TYPES } from "@/lib/capabilities";
 import { INJURY_ICONS } from "../injuryIcons";
@@ -91,7 +92,10 @@ export function InjuryStep({ draft, update, showError }: { draft: ReportDraft; u
             </div>
             <Field label={t("report.description")} hint={t("report.descriptionHint")}>
               {({ id, describedBy }) => (
-                <Textarea id={id} aria-describedby={describedBy} maxLength={1000} value={draft.description} onChange={(e) => update({ description: e.target.value })} />
+                <div className="flex flex-col gap-2">
+                  <Textarea id={id} aria-describedby={describedBy} maxLength={1000} value={draft.description} onChange={(e) => update({ description: e.target.value })} />
+                  <VoiceButton onText={(text) => update({ description: `${draft.description} ${text}`.trim().slice(0, 1000) })} />
+                </div>
               )}
             </Field>
             <div className="grid grid-cols-2 gap-3">

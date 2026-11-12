@@ -125,3 +125,33 @@ test("live updates stream needs a session", async () => {
   const res = await fetch(`${base}/api/stream`);
   assert.equal(res.status, 401);
 });
+
+test("surge mode widens the radius, readiness expires, comments stay inside one hospital", async () => {
+  const admin = new Client();
+  await admin.staff("admin@jeevansetu.demo", "Admin@2026!");
+  const citizen = new Client();
+  await citizen.citizen("9876500300");
+  const drill = () => citizen.call("POST", "/api/drill/preview", { injury_type: "burn", symptoms: {}, location: { lat: 28.4744, lng: 77.504, source: "gps" } });
+  assert.equal((await drill()).body.candidates.length, 1, "only Knowledge Park offers burn care within 25 km");
+  assert.equal((await admin.call("PUT", "/api/admin/surge", { active: true, message: "Major accident on the expressway", radius_km: 40 })).status, 200);
+  assert.equal((await citizen.call("GET", "/api/broadcast")).body.message, "Major accident on the expressway");
+  assert.equal((await drill()).body.candidates.length, 2, "Dadri Road (30 km) qualifies during surge");
+  await admin.call("PUT", "/api/admin/surge", { active: false, radius_km: 40 });
+  assert.equal((await drill()).body.candidates.length, 1);
+
+  const staff = new Client();
+  await staff.staff("staff.h3@jeevansetu.demo");
+  const ready = await staff.call("PUT", "/api/staff/readiness", { item: "trauma_surgeon", available: true });
+  assert.equal(ready.body.readiness.trauma_surgeon.state, "available");
+  assert.equal(ready.body.readiness.ot_free.state, "unknown");
+
+  const created = await submit(citizen);
+  const aid = (await staff.call("GET", "/api/staff/requests")).body.find((r) => r.request_code === created.body.public_code).assignment_id;
+  assert.equal((await staff.call("POST", `/api/staff/requests/${aid}/comments`, { text: "Keep trauma bay 2 ready" })).status, 201);
+  assert.equal((await staff.call("GET", `/api/staff/requests/${aid}/comments`)).body[0].author, "Ritu Sharma");
+  const other = new Client();
+  await other.staff("staff.h1@jeevansetu.demo");
+  assert.equal((await other.call("GET", `/api/staff/requests/${aid}/comments`)).status, 404);
+  assert.equal((await staff.call("POST", "/api/staff/handover", { text: "Night shift: OT 2 under maintenance." })).status, 201);
+  assert.equal((await other.call("GET", "/api/staff/handover")).body.length, 0, "handover notes stay within one hospital");
+});

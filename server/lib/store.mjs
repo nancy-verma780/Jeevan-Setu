@@ -3,7 +3,7 @@ import path from "node:path";
 
 const TABLES = [
   "users", "sessions", "otp", "hospitals", "requests", "consents", "events", "assignments", "audit", "images",
-  "shares", "notifications", "feedback",
+  "shares", "notifications", "feedback", "settings", "comments", "handover",
   // [FUTURE] data hooks: tables exist so later features need no migration. Nothing writes to them yet.
   "volunteers", "blood_donors", "crash_events", "corridor_requests",
 ];

@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { BookOpen, ChevronRight, IdCard, MapPin, Sparkles } from "lucide-react";
+import { BookOpen, ChevronRight, Contrast, IdCard, MapPin, Sparkles } from "lucide-react";
+import { readDisplayPrefs } from "@/lib/hooks/useDisplayPrefs";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Call112Button } from "@/components/Call112Button";
@@ -34,6 +35,29 @@ export function HomePage() {
       <Call112Button variant="outline" />
     </div>
   );
+
+  if (readDisplayPrefs().simple) {
+    // Simple Mode: three big options only.
+    return (
+      <CitizenLayout>
+        <h1 className="text-2xl font-bold">{t("home.greeting")}</h1>
+        <div className="flex flex-col gap-4">
+          <Link to="/report" className="flex min-h-[120px] items-center justify-center gap-4 rounded-lg bg-primary-700 px-6 text-2xl font-bold text-white no-underline">
+            <span className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-white text-lg">SOS</span>
+            {t("home.sosTitle")}
+          </Link>
+          <Call112Button variant="hero" className="border-2 border-danger-700" />
+          <Link to="/hospitals" className="flex min-h-[120px] items-center justify-center gap-3 rounded-lg border-2 border-primary-700 bg-white px-6 text-2xl font-bold text-primary-800 no-underline">
+            <MapPin className="h-8 w-8" aria-hidden />
+            {t("home.nearby")}
+          </Link>
+        </div>
+        <Link to="/display" className="text-center font-semibold text-primary-700">
+          {t("home.display")}
+        </Link>
+      </CitizenLayout>
+    );
+  }
 
   return (
     <CitizenLayout showDrillToggle footer={footer}>
@@ -83,6 +107,11 @@ export function HomePage() {
         <Link to="/passport" className="flex min-h-tap items-center gap-4 p-4 text-slate-900 no-underline hover:bg-slate-50">
           <IdCard className="h-5 w-5 text-primary-700" aria-hidden />
           <span className="flex-1 font-medium">{t("home.passport")}</span>
+          <ChevronRight className="h-5 w-5 text-slate-500" aria-hidden />
+        </Link>
+        <Link to="/display" className="flex min-h-tap items-center gap-4 p-4 text-slate-900 no-underline hover:bg-slate-50">
+          <Contrast className="h-5 w-5 text-primary-700" aria-hidden />
+          <span className="flex-1 font-medium">{t("home.display")}</span>
           <ChevronRight className="h-5 w-5 text-slate-500" aria-hidden />
         </Link>
         <Link to="/coming-soon" className="flex min-h-tap items-center gap-4 p-4 text-slate-900 no-underline hover:bg-slate-50">

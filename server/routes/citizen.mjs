@@ -5,7 +5,8 @@ import { ACTIVE_STATUSES, cancelRequest, recordEvent, reliabilityFor, startAlloc
 import { analyzer } from "../lib/analyzer.mjs";
 import { checkQuality, decodeImage, heatmapKeyFor, imageOut, RETAKE_MESSAGES, saveJpeg } from "../lib/images.mjs";
 import { evaluatePriority, SYMPTOM_FIELDS } from "../lib/priority.mjs";
-import { DEFAULT_PARAMS, REQUIRED_SERVICES, rank } from "../lib/ranking.mjs";
+import { REQUIRED_SERVICES, rank } from "../lib/ranking.mjs";
+import { currentParams } from "../lib/settings.mjs";
 import { intParam } from "../lib/router.mjs";
 import { normaliseIndianMobile } from "../lib/security.mjs";
 
@@ -258,7 +259,7 @@ export function registerCitizen(router, store) {
       const location = validLocation(body.location);
       const result = evaluatePriority(body.injury_type, symptoms, validAge(body.patient_age));
       const hospitals = store.all("hospitals");
-      const ranked = rank(location.lat, location.lng, body.injury_type, hospitals, new Set(), DEFAULT_PARAMS, Date.now(), reliabilityFor(store, hospitals.map((h) => h.id)));
+      const ranked = rank(location.lat, location.lng, body.injury_type, hospitals, new Set(), currentParams(store), Date.now(), reliabilityFor(store, hospitals.map((h) => h.id)));
       return {
         body: {
           priority: result.category,

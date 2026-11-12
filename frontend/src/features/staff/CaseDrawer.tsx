@@ -15,6 +15,7 @@ import { staff } from "@/lib/api/endpoints";
 import type { DeclineReason, ImageInfo, StaffCaseDetail } from "@/lib/api/types";
 import { formatKm, formatTime } from "@/lib/format";
 import { PRIORITY_META } from "@/lib/priority";
+import { CaseComments } from "./Notes";
 import { PatientMap } from "./PatientMap";
 import { patientLabel } from "./patientLabel";
 
@@ -232,6 +233,8 @@ function CaseBody({ data, images, imagesLoading }: { data: StaffCaseDetail; imag
       </section>
 
       <PatientMap lat={p.lat} lng={p.lng} code={p.request_code} />
+
+      <CaseComments assignmentId={data.assignment_id} />
 
       <section aria-labelledby="case-photos" className="flex flex-col gap-3">
         <h3 id="case-photos" className="text-sm font-semibold text-slate-700">

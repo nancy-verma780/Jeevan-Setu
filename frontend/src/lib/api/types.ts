@@ -26,6 +26,25 @@ export type EventType =
   | "PATIENT_ARRIVED"
   | "CANCELLED";
 
+export type ReadinessItem = "trauma_surgeon" | "ot_free" | "blood_available" | "ventilator_free";
+export interface ReadinessState {
+  state: "available" | "not_available" | "expired" | "unknown";
+  confirmed_at: string | null;
+  expires_at: string | null;
+}
+export interface Broadcast {
+  active: boolean;
+  message?: string;
+  radius_km?: number;
+  started_at?: string | null;
+}
+export interface Note {
+  id: number;
+  text: string;
+  created_at: string;
+  author: string;
+}
+
 export interface Freshness {
   level: "fresh" | "ageing" | "stale" | "missing";
   age_minutes: number | null;
@@ -201,6 +220,7 @@ export interface Hospital extends HospitalPin {
   beds_updated_at: string | null;
   open_for_emergency: boolean;
   freshness?: Freshness;
+  readiness?: Record<ReadinessItem, ReadinessState>;
 }
 
 export interface ModelMetrics {

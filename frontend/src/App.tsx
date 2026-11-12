@@ -9,6 +9,7 @@ import { FirstAidPage } from "@/features/citizen/FirstAidPage";
 import { HomePage } from "@/features/citizen/HomePage";
 import { NearbyHospitalsPage } from "@/features/citizen/NearbyHospitalsPage";
 import { PassportPage } from "@/features/citizen/PassportPage";
+import { DisplayPage } from "@/features/citizen/DisplayPage";
 import { ComingSoonPage } from "@/features/public/ComingSoonPage";
 import { ScorecardPage } from "@/features/public/ScorecardPage";
 import { TrackPage } from "@/features/public/TrackPage";
@@ -56,6 +57,7 @@ export function App() {
       <Route path="/staff/login" element={<Deferred><StaffLoginPage /></Deferred>} />
       <Route path="/staff" element={<RequireRole role="staff"><Deferred><IncomingPage /></Deferred></RequireRole>} />
       <Route path="/admin" element={<RequireRole role="admin"><Deferred><AdminPage /></Deferred></RequireRole>} />
+      <Route path="/display" element={<RequireRole role="citizen"><DisplayPage /></RequireRole>} />
       <Route path="/passport" element={<RequireRole role="citizen"><PassportPage /></RequireRole>} />
       <Route path="/track/:token" element={<TrackPage />} />
       <Route path="/scorecard" element={<ScorecardPage />} />

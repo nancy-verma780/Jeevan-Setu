@@ -1,0 +1,18 @@
+# One-click deploy on Render (render.com): New → Blueprint → pick this repository.
+services:
+  - type: web
+    name: jeevansetu
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build --prefix frontend
+    startCommand: node server/index.mjs
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: JS_COOKIE_SECURE
+        value: "true"
+      - key: JS_EXPOSE_DEV_OTP
+        value: "true"
+      - key: JS_OTP_PEPPER
+        generateValue: true

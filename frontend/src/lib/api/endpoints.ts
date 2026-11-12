@@ -1,6 +1,9 @@
 import { api } from "./client";
 import type {
   AccessLogRow,
+  Broadcast,
+  Note,
+  ReadinessItem,
   CaseReport,
   Feedback,
   HospitalStat,
@@ -67,6 +70,8 @@ export const passport = {
 };
 
 export const publicApi = {
+  broadcast: () => api<Broadcast>("/api/broadcast"),
+  setSurge: (body: { active: boolean; message: string; radius_km: number }) => api<Broadcast>("/api/admin/surge", { method: "PUT", body }),
   track: (token: string) => api<TrackView>(`/api/track/${encodeURIComponent(token)}`),
   scorecard: () => api<{ hospitals: HospitalStat[]; updated_at: string }>("/api/public/scorecard"),
 };
@@ -90,6 +95,11 @@ export const staff = {
     api<StaffCaseDetail>(`/api/staff/requests/${assignmentId}/decision`, { body: { action, reason } }),
   arrived: (assignmentId: number) => api<StaffCaseDetail>(`/api/staff/requests/${assignmentId}/arrived`, { method: "POST" }),
   hospital: () => api<Hospital>("/api/staff/hospital"),
+  readiness: (item: ReadinessItem, available: boolean) => api<Hospital>("/api/staff/readiness", { method: "PUT", body: { item, available } }),
+  comments: (assignmentId: number) => api<Note[]>(`/api/staff/requests/${assignmentId}/comments`),
+  addComment: (assignmentId: number, text: string) => api<Note>(`/api/staff/requests/${assignmentId}/comments`, { body: { text } }),
+  handover: () => api<Note[]>("/api/staff/handover"),
+  addHandover: (text: string) => api<Note>("/api/staff/handover", { body: { text } }),
   updateHospital: (changes: Partial<{ free_beds: number; services: Service[]; diversion: boolean }>) =>
     api<Hospital>("/api/staff/hospital", { method: "PATCH", body: changes }),
   imageUrl: (imageId: number, variant: "photo" | "heatmap") => `/api/staff/images/${imageId}?variant=${variant}`,

@@ -48,3 +48,33 @@
 .leaflet-bar a:focus-visible {
   outline: 2px solid #0f766e;
 }
+
+/* Accessibility modes (citizen Display settings) */
+html.large-text {
+  font-size: 112.5%;
+}
+html.hc body {
+  background: #ffffff;
+  color: #000000;
+}
+html.hc .text-slate-500,
+html.hc .text-slate-600,
+html.hc .text-slate-700 {
+  color: #000000 !important;
+}
+html.hc .border-slate-100,
+html.hc .border-slate-200,
+html.hc .border-slate-300 {
+  border-color: #000000 !important;
+}
+html.hc .bg-slate-50,
+html.hc .bg-slate-100 {
+  background-color: #ffffff !important;
+}
+html.hc .bg-primary-700 {
+  background-color: #064e45 !important;
+}
+html.hc :focus-visible {
+  outline: 3px solid #000000 !important;
+  outline-offset: 2px;
+}

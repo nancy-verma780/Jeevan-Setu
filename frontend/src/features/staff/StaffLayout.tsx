@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { Logo } from "@/components/Logo";
 import { OfflineBanner } from "@/components/ui/OfflineBanner";
+import { SurgeBanner } from "@/components/SurgeBanner";
 import { useMe, useSignOut } from "@/features/auth/useMe";
 
 /** Side menu plus content. On narrow screens the menu stacks above the content. */
@@ -14,6 +15,7 @@ export function StaffLayout({ children, pendingCount }: { children: ReactNode; p
   return (
     <div className="flex min-h-[100dvh] flex-col bg-slate-50">
       <OfflineBanner />
+      <SurgeBanner />
       <div className="flex flex-1 flex-wrap">
         <nav aria-label={t("staff.portal")} className="flex flex-[1_1_216px] flex-col gap-6 border-b border-r border-slate-200 bg-white p-4 lg:max-w-[240px] lg:border-b-0">
           <Logo subtitle={t("staff.portal")} />

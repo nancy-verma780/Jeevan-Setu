@@ -96,3 +96,23 @@ test("arrival closes the loop, family link shows status, admin sees the case rep
   await admin.getByRole("button", { name: "Run comparison" }).click();
   await expect(admin.getByText(/would go to a different first hospital/)).toBeVisible();
 });
+
+test("surge mode broadcast reaches citizens; simple mode shows three big options", async ({ browser }) => {
+  const admin = await (await browser.newContext({ viewport: { width: 1440, height: 900 } })).newPage();
+  await signInStaff(admin, "admin@jeevansetu.demo", "Admin@2026!");
+  await admin.getByLabel("Message for citizens and hospitals").fill("Major accident on the expressway");
+  await admin.getByRole("button", { name: "Start surge mode" }).click();
+  await expect(admin.getByRole("button", { name: "End surge mode" })).toBeVisible();
+
+  const citizen = await (await browser.newContext({ viewport: { width: 390, height: 844 } })).newPage();
+  await signInCitizen(citizen, "98765 00055");
+  await expect(citizen.getByRole("alert").filter({ hasText: "Major accident on the expressway" })).toBeVisible();
+  await citizen.getByRole("link", { name: "Display settings" }).click();
+  await citizen.getByRole("switch", { name: "Simple mode" }).click();
+  await citizen.getByRole("link", { name: "Back" }).click();
+  await expect(citizen.getByRole("link", { name: /Hospitals near you/ })).toBeVisible();
+  await expect(citizen.getByText("My requests")).toHaveCount(0);
+
+  await admin.getByRole("button", { name: "End surge mode" }).click();
+  await expect(admin.getByRole("button", { name: "Start surge mode" })).toBeVisible();
+});

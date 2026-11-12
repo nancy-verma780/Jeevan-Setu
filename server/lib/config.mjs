@@ -5,7 +5,8 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const env = process.env;
 
 export const config = {
-  port: Number(env.JS_PORT ?? 8000),
+  // Hosting platforms such as Render and Railway pass the port in PORT.
+  port: Number(env.JS_PORT || env.PORT || 8000),
   dataDir: path.resolve(env.JS_DATA_DIR ?? path.join(here, "..", "data")),
   distDir: path.resolve(here, "..", "..", "frontend", "dist"),
   exposeDevOtp: (env.JS_EXPOSE_DEV_OTP ?? "true") === "true",

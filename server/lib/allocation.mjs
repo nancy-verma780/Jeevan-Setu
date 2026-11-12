@@ -7,7 +7,8 @@
 import { config } from "./config.mjs";
 import { conflict, invalid, notFound } from "./http.mjs";
 import { notifyEvent } from "./notify.mjs";
-import { DEFAULT_PARAMS, rank, reliabilityFromHistory } from "./ranking.mjs";
+import { rank, reliabilityFromHistory } from "./ranking.mjs";
+import { currentParams } from "./settings.mjs";
 
 export const DECLINE_REASONS = {
   no_bed: "No free emergency bed",
@@ -63,7 +64,7 @@ export function reassign(store, request) {
     request.injury_type,
     hospitals,
     asked,
-    DEFAULT_PARAMS,
+    currentParams(store),
     Date.now(),
     reliabilityFor(store, hospitals.filter((h) => !asked.has(h.id)).map((h) => h.id)),
   );

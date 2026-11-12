@@ -20,6 +20,7 @@ import { PRIORITY_META } from "@/lib/priority";
 import { playAlert } from "./alertSound";
 import { CaseDrawer } from "./CaseDrawer";
 import { patientLabel } from "./patientLabel";
+import { HandoverNotes } from "./Notes";
 import { ResourcePanel, useDiversion } from "./ResourcePanel";
 import { StaffLayout } from "./StaffLayout";
 
@@ -204,6 +205,8 @@ export function IncomingPage() {
           />
         )}
       </div>
+
+      <HandoverNotes />
 
       <CaseDrawer
         assignmentId={selected}

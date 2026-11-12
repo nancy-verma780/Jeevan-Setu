@@ -10,6 +10,7 @@ import { OutboxTab } from "./OutboxTab";
 import { MapTab } from "./MapTab";
 import { Metrics } from "./Metrics";
 import { ModelCard } from "./ModelCard";
+import { SurgeCard } from "./SurgeCard";
 import { RequestsTab } from "./RequestsTab";
 import { StaffTab } from "./StaffTab";
 
@@ -24,6 +25,7 @@ export function AdminPage() {
     <AdminLayout>
       <h1 className="text-xl font-bold">{t("admin.title")}</h1>
       <Metrics />
+      <SurgeCard />
       <ModelCard />
       <HospitalPerformance />
       <div role="tablist" aria-label={t("admin.title")} className="flex gap-1 overflow-x-auto border-b border-slate-200">

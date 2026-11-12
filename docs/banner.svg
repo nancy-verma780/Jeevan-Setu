@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="200" viewBox="0 0 960 200" role="img" aria-label="JeevanSetu: emergency care, connected">
+  <rect width="960" height="200" rx="16" fill="#0F766E"/>
+  <g transform="translate(48 44) scale(2.33)">
+    <rect width="48" height="48" rx="12" fill="#FFFFFF"/>
+    <path d="M7 31 C 13 17, 35 17, 41 31" fill="none" stroke="#0F766E" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M16 23.6 V31 M24 20.8 V31 M32 23.6 V31" stroke="#14B8A6" stroke-width="1.6" stroke-linecap="round"/>
+    <path d="M5 35 H15 L18.5 29 L22.5 40 L26.5 32 L28.5 35 H43" fill="none" stroke="#0F766E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="196" y="96" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="52" font-weight="700" fill="#FFFFFF">JeevanSetu</text>
+  <text x="198" y="138" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="22" fill="#CCFBF1">From an emergency report to a hospital that has said yes.</text>
+  <text x="198" y="168" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="16" fill="#99F6E4">Interpretable triage · automatic hospital reassignment · English and Hindi</text>
+</svg>

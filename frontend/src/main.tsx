@@ -8,6 +8,9 @@ import { ToastProvider } from "@/components/ui/Toast";
 import { DrillProvider } from "@/features/drill/DrillContext";
 import { ApiError } from "@/lib/api/client";
 import { App } from "./App";
+import { applyDisplayPrefs, readDisplayPrefs } from "@/lib/hooks/useDisplayPrefs";
+
+applyDisplayPrefs(readDisplayPrefs());
 
 const queryClient = new QueryClient({
   defaultOptions: {

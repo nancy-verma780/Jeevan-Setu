@@ -1,6 +1,7 @@
 import { HttpError, invalid, notFound } from "../lib/http.mjs";
 import { assignmentForStaff, audit, decide, markArrived } from "../lib/allocation.mjs";
 import { freshness } from "../lib/freshness.mjs";
+import { READINESS_ITEMS, READINESS_TTL_MS, readinessOut } from "../lib/settings.mjs";
 import { imageOut, readImage } from "../lib/images.mjs";
 import { intParam } from "../lib/router.mjs";
 
@@ -58,7 +59,8 @@ function caseOut(store, a) {
 
 export function hospitalOut(h) {
   const { created_at: _created, ...rest } = h;
-  return { ...rest, freshness: freshness(h.beds_updated_at) };
+  const { readiness: _r, ...pub } = rest;
+  return { ...pub, freshness: freshness(h.beds_updated_at), readiness: readinessOut(h) };
 }
 
 function ownAssignment(store, ctx, user) {
@@ -126,6 +128,74 @@ export function registerStaff(router, store) {
       markArrived(store, a, user);
       audit(store, user.id, "MARK_ARRIVED", "assignment", a.id);
       return { body: caseOut(store, a) };
+    },
+    "staff",
+  );
+
+  router.put(
+    "/api/staff/readiness",
+    async (ctx) => {
+      const user = ctx.user();
+      const h = store.get("hospitals", user.hospital_id);
+      if (!h) throw notFound("Your account is not linked to a hospital.");
+      const b = await ctx.json();
+      if (!READINESS_ITEMS.includes(b.item) || typeof b.available !== "boolean") throw invalid("Choose a readiness item and yes or no.");
+      const now = Date.now();
+      h.readiness = { ...(h.readiness ?? {}), [b.item]: { available: b.available, confirmed_at: new Date(now).toISOString(), expires_at: new Date(now + READINESS_TTL_MS).toISOString(), by: user.id } };
+      audit(store, user.id, "CONFIRM_READINESS", "hospital", h.id);
+      return { body: hospitalOut(h) };
+    },
+    "staff",
+  );
+
+  // Internal case comments: visible only to staff of the hospital the case was sent to.
+  router.get(
+    "/api/staff/requests/:id/comments",
+    (ctx) => {
+      const user = ctx.user();
+      const a = ownAssignment(store, ctx, user);
+      const rows = store
+        .filter("comments", (c) => c.request_id === a.request_id && c.hospital_id === user.hospital_id)
+        .map((c) => ({ id: c.id, text: c.text, created_at: c.created_at, author: store.get("users", c.author_id)?.name ?? "" }));
+      return { body: rows, readOnly: true };
+    },
+    "staff",
+  );
+  router.post(
+    "/api/staff/requests/:id/comments",
+    async (ctx) => {
+      const user = ctx.user();
+      const a = ownAssignment(store, ctx, user);
+      const text = String((await ctx.json()).text ?? "").trim();
+      if (!text || text.length > 500) throw invalid("Write a comment of up to 500 characters.");
+      const c = store.insert("comments", { request_id: a.request_id, hospital_id: user.hospital_id, author_id: user.id, text, created_at: new Date().toISOString() });
+      return { status: 201, body: { id: c.id, text: c.text, created_at: c.created_at, author: user.name } };
+    },
+    "staff",
+  );
+
+  // Shift handover notes for the whole hospital team.
+  router.get(
+    "/api/staff/handover",
+    (ctx) => {
+      const user = ctx.user();
+      const rows = store
+        .filter("handover", (n) => n.hospital_id === user.hospital_id)
+        .slice(-20)
+        .reverse()
+        .map((n) => ({ id: n.id, text: n.text, created_at: n.created_at, author: store.get("users", n.author_id)?.name ?? "" }));
+      return { body: rows, readOnly: true };
+    },
+    "staff",
+  );
+  router.post(
+    "/api/staff/handover",
+    async (ctx) => {
+      const user = ctx.user();
+      const text = String((await ctx.json()).text ?? "").trim();
+      if (!text || text.length > 1000) throw invalid("Write a note of up to 1000 characters.");
+      const n = store.insert("handover", { hospital_id: user.hospital_id, author_id: user.id, text, created_at: new Date().toISOString() });
+      return { status: 201, body: { id: n.id, text: n.text, created_at: n.created_at, author: user.name } };
     },
     "staff",
   );

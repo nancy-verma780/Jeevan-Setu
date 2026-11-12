@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, Minus, Plus, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { FreshnessText } from "@/components/FreshnessText";
+import { ReadinessPanel } from "./ReadinessPanel";
 import { cx } from "@/components/ui/cx";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { ErrorState } from "@/components/ui/States";
@@ -96,6 +97,10 @@ export function ResourcePanel() {
         </span>
         <Switch checked={h.diversion} tone="warning" labelledBy="diversion-label" disabled={save.isPending} onChange={(diversion) => save.mutate({ diversion })} />
         <span className="text-xs text-slate-600">{h.diversion ? t("staff.diversionOn") : t("staff.diversionOff")}</span>
+      </div>
+
+      <div className="w-full border-t border-slate-200 pt-3">
+        <ReadinessPanel hospital={h} />
       </div>
     </section>
   );
